@@ -73,8 +73,3 @@ clean_text:
 
   cleantext = slackmentions.clean_text(text, people=people)
   # cleantext = 'hi, could you please tell to call me?'
-
-
-If a username is not found in the slack channel, SlackDataError will
-propogate up from SlackPerson.
-
