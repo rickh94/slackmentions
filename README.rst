@@ -49,6 +49,11 @@ mention_text:
     userlist: The json from slack api users.list. Required if people is not
     provided.
 
+    silent: slackperson.SlackDataError will be raised if a mention is found
+    in the text but not in the userlist. Setting to True will swallow this
+    error and ignore that mention. Only applies if userlist is specified, not
+    people.
+
 clean_text:
     simply deletes all @ mentions from the text.
 

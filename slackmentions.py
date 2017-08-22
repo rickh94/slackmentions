@@ -1,5 +1,6 @@
 """Defines functions for dealing with mentions in slack messages."""
 from slackperson import SlackPerson
+from slackperson import SlackDataError
 
 
 def findpeople(text, userlist, silent=False):
@@ -16,15 +17,17 @@ def findpeople(text, userlist, silent=False):
     Returns: List of SlackPerson objects or empty list.
     """
     usernames = re.findall('@([a-zA-Z0-9-._]*)', text)
-    person_list = [SlackPerson(user, userlist) for user in usernames]
-    newtext = text
-    for person in person_list:
-        newtext = newtext.replace('@' + person.username,
-                                  '<@{}>'.format(person.userid))
+    person_list = []
+    for user in userlist:
+        try:
+            person_list.append(SlackPerson(user, userlist))
+        except SlackDataError:
+            if not silent:
+                raise
     return person_list
 
 
-def mention_text(text, people=None, userlist=None):
+def mention_text(text, people=None, userlist=None, silent=False):
     """Replaces username mentions in text with user id mentions for tagging by
     slack api message sending.
 
@@ -35,11 +38,14 @@ def mention_text(text, people=None, userlist=None):
     findpeople. Required if userlist is not provided.
     userlist: The json from slack api users.list. Required if people is not
     provided.
+    silent: If a user is found in the text and not in userlist,
+    slackperson.SlackDataError will be raise. Set silent to True to suppress
+    these errors. Does not apply is people is provided instead of userlist.
     """
     if people is None:
         if userlist is None:
             raise SyntaxError("Either people or userlist is required.")
-        people = findpeople(text, userlist)
+        people = findpeople(text, userlist, silent=silent)
     for person in people:
         text = text.replace('@' + person.username,
                             '<@{}>'.format(person.userid, person.email))
