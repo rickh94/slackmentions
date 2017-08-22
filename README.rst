@@ -4,7 +4,6 @@ Provides functions for dealing with mentions in slack messages.
 
 Installation
 ============
-__SOON__
 ``$ pip install slackmentions``
 
 You will also need the `slackclient
