@@ -139,6 +139,10 @@ class TestSlackMentions(unittest.TestCase):
                                                         self.biden]),
             'tell and that I have a cool idea')
 
+        self.assertEqual(
+            slackmentions.clean_text('@bobama hi', people=[self.obama]),
+            'hi')
+
         # raise a SlackDataError
         self.assertRaises(
             SlackDataError,

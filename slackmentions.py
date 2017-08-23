@@ -74,7 +74,7 @@ def clean_text(text, people=None, userlist=None, silent=False,
     if clean_all:
         # if we just want to nuke them all, we don't care about the userlist or
         # people or anything
-        text = re.sub(' @([a-zA-Z0-9-._])*', '', text)
+        text = re.sub('\s?@([a-zA-Z0-9-._])*', '', text)
         return text
 
     if people is None:
@@ -83,6 +83,6 @@ def clean_text(text, people=None, userlist=None, silent=False,
                 "One of clean_all, people, and userlist is required.")
         people = findpeople(text, userlist, silent=silent)
     for person in people:
-        text = text.replace('[\s]?@' + person.username, '')
+        text = re.sub('\s?@{}'.format(person.username), '', text).strip()
 
     return text
