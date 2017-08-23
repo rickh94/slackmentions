@@ -83,6 +83,6 @@ def clean_text(text, people=None, userlist=None, silent=False,
                 "One of clean_all, people, and userlist is required.")
         people = findpeople(text, userlist, silent=silent)
     for person in people:
-        text = text.replace(' @' + person.username, '')
+        text = text.replace('[\s]?@' + person.username, '')
 
     return text
